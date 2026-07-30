@@ -86,9 +86,11 @@
   /* fixed filter control (does not scroll with the topic chips) */
   #control{position:absolute;left:18px;top:14px;z-index:3;display:flex;align-items:center;justify-content:center;
     width:41px;height:41px;min-width:41px;padding:0;border-radius:22px;background:var(--card);border:1.6px solid var(--chipline);cursor:pointer;
-    transition:transform .15s ease;}
+    transition:transform .15s ease,background .2s,border-color .2s;}
   #control:active{transform:scale(.93);}
-  #control svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:2;}
+  #control svg{width:20px;height:20px;stroke:var(--ink2);fill:none;stroke-width:1.7;}   /* inactive: soft outline star */
+  #control.on{background:var(--card);border-color:var(--ink);}   /* active: same clean button, darker border */
+  #control.on svg{stroke:var(--ink);fill:var(--ink);}            /* active: solid star */
   /* blur + fade so topic chips merge softly as they scroll under the fixed control */
   .chipmask{position:absolute;left:0;top:9px;bottom:2px;width:66px;z-index:2;pointer-events:none;
     background:linear-gradient(to right,var(--paper) 0,rgba(247,247,246,.92) 40%,rgba(247,247,246,0) 100%);
@@ -116,7 +118,16 @@
   .adfoot .adlines{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;}
   .adcta2{flex:none;font-family:var(--mono);font-size:12px;font-weight:800;color:var(--ink);border:1.5px solid var(--ink);border-radius:7px;padding:6px 13px;white-space:nowrap;}
 
-  .card{background:var(--card);border-radius:12px;border:1.5px solid var(--line);overflow:hidden;will-change:transform;}
+  .card{position:relative;background:var(--card);border-radius:12px;border:1.5px solid var(--line);overflow:hidden;will-change:transform;}
+  /* per-card favorite star */
+  .favbtn{position:absolute;top:9px;right:9px;z-index:6;width:28px;height:28px;padding:0;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s ease;}
+  .favbtn svg{width:19px;height:19px;fill:none;stroke:var(--ink3);stroke-width:1.6;}
+  .favbtn.on svg{fill:var(--ink);stroke:var(--ink);}
+  .favbtn:active{transform:scale(.82);}
+  /* keep the star clear of each card's own top-right content */
+  .chead{padding-right:28px;}
+  .card.weather .wtop{padding-right:30px;}
+  .card.live .viewers{right:46px;}
   .hl{font-size:16px;font-weight:800;letter-spacing:-.3px;line-height:1.34;color:var(--ink);}
   .src{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--ink2);font-weight:700;font-family:var(--mono);}
   .src .dot{color:var(--ink3);}
@@ -153,6 +164,51 @@
   .tnlist li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line2);font-size:14px;font-weight:600;color:var(--ink);line-height:1.4;}
   .tnlist li:first-child{border-top:none;}
   .tnlist li::before{content:"";width:6px;height:6px;border:1.5px solid var(--ink);border-radius:2px;margin-top:5px;flex:none;}
+
+  /* 매일체크 — 위젯 콜라주 (날씨·코스피·환율) */
+  .card.widgets{padding:14px 15px;}
+  .wchead{font-family:var(--mono);font-size:11.5px;font-weight:800;color:var(--ink2);letter-spacing:.2px;margin-bottom:11px;}
+  .wcoll{display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:1fr 1fr;gap:9px;}
+  .wtile{border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;display:flex;flex-direction:column;justify-content:center;}
+  .wtile.big{grid-row:1 / span 2;gap:1px;}
+  .wlab{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink2);}
+  .wbig{font-family:var(--mono);font-size:34px;font-weight:800;line-height:1.05;color:var(--ink);letter-spacing:-1.5px;margin:5px 0 3px;}
+  .wsub{font-size:12px;font-weight:700;color:var(--ink2);line-height:1.3;}
+  .wnum{font-family:var(--mono);font-size:16px;font-weight:800;color:var(--ink);margin:6px 0 3px;letter-spacing:-.3px;}
+  .wchg{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--ink2);}
+
+  /* 매일체크 — 만보기 위젯 */
+  .card.pedometer{padding:15px;}
+  .pedtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;padding-right:28px;}
+  .pedlab{font-family:var(--mono);font-size:12px;font-weight:800;color:var(--ink);}
+  .pedcmp{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink2);}
+  .pednum{font-family:var(--mono);font-size:32px;font-weight:800;color:var(--ink);letter-spacing:-1.5px;line-height:1;}
+  .pednum span{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--ink2);margin-left:6px;letter-spacing:0;}
+  .pedbar{height:9px;border:1.5px solid var(--line);border-radius:5px;overflow:hidden;margin:13px 0 10px;}
+  .pedbar i{display:block;height:100%;background:var(--ink);}
+  .pedmsg{font-size:13px;font-weight:700;color:var(--ink2);line-height:1.35;}
+
+  /* 참여자 소셜프루프 카드 */
+  .card.socialproof{padding:15px 16px;}
+  .sptop{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+  .spav{display:flex;}
+  .spa{width:27px;height:27px;border-radius:50%;background:var(--fill);border:1.5px solid var(--line);margin-left:-9px;box-shadow:0 0 0 2px var(--card);}
+  .spa:first-child{margin-left:0;}
+  .spnum{font-size:12.5px;font-weight:700;color:var(--ink2);}
+  .spnum b{color:var(--ink);font-weight:800;font-family:var(--mono);}
+
+  /* 댓글 하이라이트 큐레이션 카드 */
+  .card.commentcuration{padding:15px 16px;}
+  .cclabel{display:inline-flex;font-family:var(--mono);font-size:11px;font-weight:800;color:var(--ink);border:1.5px solid var(--ink);border-radius:5px;padding:2px 8px;margin-bottom:12px;}
+  .ccexp{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+  .ccav{width:34px;height:34px;border-radius:50%;background:var(--fill);border:1.5px solid var(--line);flex:none;}
+  .ccwho{display:flex;flex-direction:column;gap:2px;}
+  .ccname{font-size:14px;font-weight:800;color:var(--ink);}
+  .cctitle{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink2);}
+  .ccquote{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--ink);line-height:1.42;padding-left:12px;border-left:3px solid var(--line);}
+  .ccthumb{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:13px;font-weight:800;color:var(--ink);}
+  .ccthumb svg{width:17px;height:17px;stroke:var(--ink);fill:none;stroke-width:1.6;}
+  .ccorig{margin-top:12px;padding-top:11px;border-top:1px solid var(--line2);font-size:12px;font-weight:700;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   .card.briefing{padding:15px;background:var(--card);border-style:dashed;}
   .card.briefing .tag{border:1.5px solid var(--line);color:var(--ink2);font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px;font-family:var(--mono);}
@@ -292,10 +348,11 @@
   var CHIPS = [
     {id:"now",     label:"이 시각 이슈", live:true, subs:[
       {id:"h3",label:"3시간 전"},{id:"h6",label:"6시간 전"},{id:"morning",label:"모닝 브리핑"}]},
-    {id:"weather", label:"기상·재난"},
+    {id:"daily",   label:"매일 체크"},
     {id:"hot",     label:"지금 뜨거운"},
     {id:"market",  label:"마켓 나우", subs:[
       {id:"stock",label:"증시"},{id:"fx",label:"환율"},{id:"coin",label:"코인"}]},
+    {id:"weather", label:"기상·재난"},
     {id:"live",    label:"라이브", live:true},
     {id:"fact",    label:"팩트체크"}
   ];
@@ -308,7 +365,7 @@
   }
 
   var CARDS = [
-    {type:"timenews", chips:["now"], title:"1시 30분 주요 뉴스", items:[
+    {type:"timenews", fav:true, favRank:2, chips:["now"], title:"1시 30분 주요 뉴스", items:[
       "코스피 6,800선 안착…외국인 순매수 지속",
       "한은 금통위, 기준금리 동결 결정",
       "정부 추경 예산안 국회 본회의 상정",
@@ -319,6 +376,13 @@
     {type:"market", chips:["market"], sub:{market:"stock"}, module:"증시 · 실시간", rows:[
       {name:"코스피", v:"6,797.70", c:"▲ 50.1  +0.74%", dir:"up",   s:[3,4,3.6,5,4.8,6,5.6,7]},
       {name:"코스닥", v:"751.09",   c:"▼ 2.26  -0.30%", dir:"down", s:[6,5.6,5.8,5.4,5.5,5.2,5.3,5.0]}]},
+    {type:"widgets", fav:true, favRank:0, chips:["daily"],
+      weather:{loc:"서울", temp:"27°", cond:"흐리고 비 · 체감 30°"},
+      kospi:{v:"6,797.70", c:"▲ 0.74%"},
+      fx:{v:"1,342.5", c:"▲ 0.63%"}},
+    {type:"pedometer", fav:true, favRank:1, chips:["daily"],
+      steps:"7,842", cmp:"▲ 1,204", pct:78,
+      msg:"목표 10,000걸음까지 2,158걸음! 조금만 더 힘내요"},
     {type:"ranking", chips:["now"], sub:{now:"h3"}, title:"이 시각 많이 본 뉴스", items:[
       ["'○○ 사태' 후폭풍…책임론 확산","12.4만"],
       ["환율 1,340원 돌파, 수입물가 비상","9.1만"],
@@ -335,6 +399,12 @@
       "간밤 미 증시 상승 마감, 오늘 코스피 강세 출발 전망",
       "전국 대부분 지역 강한 비…출근길 교통 혼잡 유의",
       "이번 주 주요 기업 실적 발표 집중, 변동성 확대 주의"]},
+    {type:"socialproof", chips:["hot"], count:"509", source:"스포츠경향", time:"32분 전",
+      title:"손흥민, 시즌 20호골 폭발…팀 단독 선두 등극"},
+    {type:"commentcuration", chips:["hot"],
+      name:"김도현", role:"대중음악 평론가", likes:"1,204",
+      quote:"올해 최고의 컴백. 사운드 완성도가 다른 차원이다",
+      article:"○○ 새 앨범, 발매 첫날 음원차트 올킬"},
     {type:"fact", chips:["fact","hot"], verdict:"대체로 사실", vclass:"t",
       claim:"“최근 물가 상승률이 2년 만에 최저치를 기록했다”", source:"팩트체크팀 검증"},
     {type:"market", chips:["market"], sub:{market:"fx"}, module:"환율 · 실시간", rows:[
@@ -362,11 +432,28 @@
     var el = document.createElement("article");
     el.className = "card " + c.type + (c.breaking ? " breaking" : "");
     el.dataset.chips = c.chips.join(" ");
+    el.dataset.fav = c.fav ? "1" : "0";
+    el.dataset.favrank = (c.favRank != null ? c.favRank : 99);
     if(c.sub){ Object.keys(c.sub).forEach(function(k){ el.dataset["sub"+k.charAt(0).toUpperCase()+k.slice(1)] = c.sub[k]; }); }
-    el.innerHTML = TPL[c.type](c);
+    el.innerHTML = TPL[c.type](c) +
+      '<button class="favbtn'+(c.fav?" on":"")+'" aria-label="즐겨찾기"><svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.9 6.2 21l1.1-6.5L2.6 9.9l6.5-.9z" stroke-linejoin="round"/></svg></button>';
     return el;
   }
   var TPL = {
+    widgets:function(c){
+      return '<div class="wchead">오늘 한눈에</div>'+
+        '<div class="wcoll">'+
+          '<div class="wtile big"><div class="wlab">날씨 · '+c.weather.loc+'</div><div class="wbig">'+c.weather.temp+'</div><div class="wsub">'+c.weather.cond+'</div></div>'+
+          '<div class="wtile"><div class="wlab">코스피</div><div class="wnum">'+c.kospi.v+'</div><div class="wchg">'+c.kospi.c+'</div></div>'+
+          '<div class="wtile"><div class="wlab">원/달러</div><div class="wnum">'+c.fx.v+'</div><div class="wchg">'+c.fx.c+'</div></div>'+
+        '</div>';
+    },
+    pedometer:function(c){
+      return '<div class="pedtop"><span class="pedlab">오늘의 걸음</span><span class="pedcmp">어제보다 '+c.cmp+'</span></div>'+
+        '<div class="pednum">'+c.steps+'<span>걸음</span></div>'+
+        '<div class="pedbar"><i style="width:'+c.pct+'%"></i></div>'+
+        '<div class="pedmsg">'+c.msg+'</div>';
+    },
     timenews:function(c){
       return '<div class="chead"><span class="eyebrow">'+c.title+'</span><span class="more">업데이트</span></div>'+
         '<ul class="tnlist">'+c.items.map(function(it){return '<li>'+it+'</li>';}).join("")+'</ul>';
@@ -412,6 +499,19 @@
         '<p class="claim">'+c.claim+'</p>'+
         '<span class="verdict '+c.vclass+'">'+c.verdict+'</span>'+
         '<div class="src" style="margin-top:11px">'+c.source+'</div>';
+    },
+    socialproof:function(c){
+      return '<div class="sptop"><span class="spav"><span class="spa"></span><span class="spa"></span><span class="spa"></span></span>'+
+        '<span class="spnum">외 <b>'+c.count+'</b>명이 추천</span></div>'+
+        '<div class="hl">'+c.title+'</div>'+
+        '<div class="src"><span class="brandname">'+c.source+'</span><span class="dot">·</span><span>'+c.time+'</span></div>';
+    },
+    commentcuration:function(c){
+      return '<div class="cclabel">가장 호응 많은</div>'+
+        '<div class="ccexp"><span class="ccav"></span><div class="ccwho"><span class="ccname">'+c.name+'</span><span class="cctitle">'+c.role+'</span></div></div>'+
+        '<p class="ccquote">“'+c.quote+'”</p>'+
+        '<div class="ccthumb"><svg viewBox="0 0 24 24"><path d="M7 10v9.4H4.3V10H7zm0 0 4.2-6.4a1.4 1.4 0 0 1 2.5 1.1L12.7 9H19a1.8 1.8 0 0 1 1.77 2.15l-1.15 6.1A2 2 0 0 1 17.65 19.4H7" stroke-linejoin="round"/></svg><b>'+c.likes+'</b></div>'+
+        '<div class="ccorig">원문 · '+c.article+'</div>';
     }
   };
 
@@ -436,13 +536,33 @@
   var chipsEl = document.getElementById("chips");
   var emptyEl = document.getElementById("empty");
   var activeChip = null, activeSub = null;
+  var defaultFav = cardEls.some(function(c){ return c.dataset.fav === "1"; });   // default ON if any favorite exists
+  var favActive = defaultFav;
 
-  function iconMenu(){return '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>';}
+  function starIcon(){return '<svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.9 6.2 21l1.1-6.5L2.6 9.9l6.5-.9z" stroke-linejoin="round"/></svg>';}
   function iconX(){return '<svg viewBox="0 0 24 24" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>';}
 
   var control = document.getElementById("control");
-  control.innerHTML = iconMenu();
-  control.addEventListener("click", function(){ if(activeChip) clearAll(); });
+  control.addEventListener("click", function(){
+    if(activeChip !== null) clearAll();   // a category filter is on → X clears it
+    else onStar();                        // otherwise the star toggles the favorites view
+  });
+  function onStar(){
+    favActive = !favActive;
+    if(favActive){ activeChip = null; activeSub = null; }   // favorites view clears any category filter
+    updateChips(); render();
+  }
+
+  // per-card favorite toggle (the star on each card)
+  feed.addEventListener("click", function(e){
+    var btn = e.target.closest ? e.target.closest(".favbtn") : null;
+    if(!btn) return;
+    var card = btn.closest(".card"); if(!card) return;
+    var on = card.dataset.fav !== "1";
+    card.dataset.fav = on ? "1" : "0";
+    btn.classList.toggle("on", on);
+    if(favActive) render();   // re-sort so favorites stay on top
+  });
 
   // All chips + sub-chips live in ONE row, fixed DOM order (subs right after their parent,
   // collapsed until the parent is active). State changes just toggle .collapsed → CSS width
@@ -470,10 +590,10 @@
 
   function onChip(id){
     if(activeChip === id){ clearAll(); return; }   // re-select selected 1-depth → clear
-    activeChip = id; activeSub = null;
+    activeChip = id; activeSub = null; favActive = false;   // category filter turns off favorites view
     updateChips(); render();
   }
-  function clearAll(){ activeChip = null; activeSub = null; updateChips(); render(); }
+  function clearAll(){ activeChip = null; activeSub = null; favActive = defaultFav; updateChips(); render(); }
   function onSub(pid, sid){
     if(activeChip !== pid) return;
     activeSub = (activeSub === sid) ? null : sid;   // re-select sub → back to all subs
@@ -481,7 +601,13 @@
   }
 
   function updateChips(){
-    control.innerHTML = activeChip ? iconX() : iconMenu();
+    if(activeChip !== null){            // category filter active → X (clear affordance)
+      control.innerHTML = iconX();
+      control.classList.remove("on");
+    } else {                           // otherwise → favorites star (filled when active)
+      control.innerHTML = starIcon();
+      control.classList.toggle("on", favActive);
+    }
     CHIPS.forEach(function(cat){
       var chip = chipEls[cat.id];
       var visible = (activeChip === null) || (activeChip === cat.id);
@@ -501,6 +627,7 @@
     chipsEl.scrollTo({left:0, behavior:"smooth"});
   }
   updateChips();
+  render(true);   // apply default favorites-first ordering on load (instant, no animation)
 
   function cardVisible(el){
     if(activeChip && el.dataset.chips.split(" ").indexOf(activeChip) < 0) return false;
@@ -514,9 +641,10 @@
     feed.querySelectorAll(".leaving").forEach(function(el){ el.classList.remove("leaving"); el.classList.add("hidden"); el.style.cssText = ""; });
   }
 
-  function render(){
+  function render(instant){
     finalizeLeaving();
-    if(activeChip !== null) scrollEl.scrollTop = 0;   // filter resets view to top (keeps ad in first screen)
+    if(activeChip !== null) scrollEl.scrollTop = 0;   // category filter resets view to top
+    var quick = reduce || instant;
     var items = Array.prototype.slice.call(feed.children);
     var first = new Map();
     items.forEach(function(el){ if(!el.classList.contains("hidden")) first.set(el, el.getBoundingClientRect()); });
@@ -524,24 +652,37 @@
     var visCards = cardEls.filter(function(c){ return cardVisible(c); });
     var visCount = visCards.length;
 
-    // In-feed ad: slot it as deep as still keeps >=50% of the ad within the first screen.
-    if(activeChip !== null && visCount >= 1){
-      var scrollH = scrollEl.clientHeight, ADH = 226, GAP = 12, acc = 0, k = 1;
-      for(var vi=0; vi<visCards.length; vi++){
-        acc += visCards[vi].offsetHeight + GAP;
-        if(acc + ADH*0.5 <= scrollH) k = vi+1; else break;
-      }
-      k = Math.max(1, Math.min(k, visCount));
-      var anchor = visCards[k-1];
-      if(anchor && anchor.nextSibling !== adFeed) feed.insertBefore(adFeed, anchor.nextSibling);
+    // Favorites view: pin favorited cards to the top, keep the rest below in order (no hiding).
+    var ordered = visCards;
+    if(favActive){
+      var favs = visCards.filter(function(c){ return c.dataset.fav === "1"; });
+      favs.sort(function(a,b){ return (+a.dataset.favrank) - (+b.dataset.favrank); });   // widget collage stays on top
+      ordered = favs.concat(visCards.filter(function(c){ return c.dataset.fav !== "1"; }));
     }
 
+    // Build target order of feed children (visible cards in order, with ads slotted in).
+    var showAdTop = (activeChip === null);
+    var showAdFeed = (activeChip !== null && visCount >= 1);
+    var seq = [];
+    if(showAdTop) seq.push(adTop);
+    if(showAdFeed){
+      var scrollH = scrollEl.clientHeight, ADH = 226, GAP = 12, acc = 0, k = 1;
+      for(var vi=0; vi<ordered.length; vi++){ acc += ordered[vi].offsetHeight + GAP; if(acc + ADH*0.5 <= scrollH) k = vi+1; else break; }
+      k = Math.max(1, Math.min(k, ordered.length));
+      ordered.forEach(function(c,i){ seq.push(c); if(i === k-1) seq.push(adFeed); });
+    } else {
+      ordered.forEach(function(c){ seq.push(c); });
+    }
+    var seqSet = new Set(seq);
+
+    // Reorder the DOM: visible items in target order, then everything else (hidden) at the end.
+    seq.forEach(function(el){ feed.appendChild(el); });
+    cardEls.forEach(function(c){ if(!seqSet.has(c)) feed.appendChild(c); });
+    if(!seqSet.has(adTop)) feed.appendChild(adTop);
+    if(!seqSet.has(adFeed)) feed.appendChild(adFeed);
+
     var willShow = new Map();
-    items.forEach(function(el){
-      if(el === adTop) willShow.set(el, activeChip === null);
-      else if(el === adFeed) willShow.set(el, activeChip !== null && visCount >= 1);
-      else willShow.set(el, cardVisible(el));
-    });
+    items.forEach(function(el){ willShow.set(el, seqSet.has(el)); });
 
     var feedRect = feed.getBoundingClientRect();
     var exiting = [], entering = [], staying = [];
@@ -557,7 +698,7 @@
       el.style.position = "absolute"; el.style.top = (r.top - feedRect.top) + "px";
       el.style.left = (r.left - feedRect.left) + "px"; el.style.width = r.width + "px"; el.style.margin = "0";
       el.classList.add("leaving");
-      if(reduce){ el.classList.remove("leaving"); el.classList.add("hidden"); el.style.cssText=""; return; }
+      if(quick){ el.classList.remove("leaving"); el.classList.add("hidden"); el.style.cssText=""; return; }
       requestAnimationFrame(function(){ el.style.transition = "transform .34s ease, opacity .3s ease"; el.style.transform = "scale(.94)"; el.style.opacity = "0"; });
       var done = function(){ el.classList.remove("leaving"); el.classList.add("hidden"); el.style.cssText=""; el.removeEventListener("transitionend", done); };
       el.addEventListener("transitionend", done); setTimeout(done, 430);
@@ -572,7 +713,7 @@
     });
     entering.forEach(function(el){ el.style.opacity = "0"; el.style.transform = "translateY(16px)"; el.style.transition = "none"; });
 
-    if(reduce){
+    if(quick){
       staying.concat(entering).forEach(function(el){ el.style.transition=""; el.style.transform=""; el.style.opacity=""; });
     } else {
       requestAnimationFrame(function(){ requestAnimationFrame(function(){
