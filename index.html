@@ -365,46 +365,46 @@
   }
 
   var CARDS = [
-    {type:"timenews", fav:true, favRank:2, chips:["now"], title:"1시 30분 주요 뉴스", items:[
+    {type:"timenews", fav:true, favRank:1, chips:["now"], title:"1시 30분 주요 뉴스", items:[
       "코스피 6,800선 안착…외국인 순매수 지속",
       "한은 금통위, 기준금리 동결 결정",
       "정부 추경 예산안 국회 본회의 상정",
       "전국 대부분 호우특보…내일까지 강한 비"]},
-    {type:"weather", chips:["weather"],
-      loc:"서울 · 중구", temp:"27°", cond:"흐리고 비 · 체감 30°",
-      alert:"호우경보 · 시간당 50mm", hours:["1시","2시","3시","4시","5시"], htemp:["28°","27°","27°","26°","26°"]},
-    {type:"market", chips:["market"], sub:{market:"stock"}, module:"증시 · 실시간", rows:[
-      {name:"코스피", v:"6,797.70", c:"▲ 50.1  +0.74%", dir:"up",   s:[3,4,3.6,5,4.8,6,5.6,7]},
-      {name:"코스닥", v:"751.09",   c:"▼ 2.26  -0.30%", dir:"down", s:[6,5.6,5.8,5.4,5.5,5.2,5.3,5.0]}]},
     {type:"widgets", fav:true, favRank:0, chips:["daily"],
       weather:{loc:"서울", temp:"27°", cond:"흐리고 비 · 체감 30°"},
       kospi:{v:"6,797.70", c:"▲ 0.74%"},
       fx:{v:"1,342.5", c:"▲ 0.63%"}},
-    {type:"pedometer", fav:true, favRank:1, chips:["daily"],
-      steps:"7,842", cmp:"▲ 1,204", pct:78,
-      msg:"목표 10,000걸음까지 2,158걸음! 조금만 더 힘내요"},
+    {type:"discuss", chips:["hot","now"], sub:{now:"h3"},
+      title:"'○○법 개정안' 두고 온라인 격론…찬반 팽팽", comments:"1.2만", up:"3.4천", down:"1.1천",
+      topcmt:"“취지는 좋은데 부작용 검토가 부족해 보인다”"},
+    {type:"commentcuration", chips:["hot"],
+      name:"김도현", role:"대중음악 평론가", likes:"1,204",
+      quote:"올해 최고의 컴백. 사운드 완성도가 다른 차원이다",
+      article:"○○ 새 앨범, 발매 첫날 음원차트 올킬"},
     {type:"ranking", chips:["now"], sub:{now:"h3"}, title:"이 시각 많이 본 뉴스", items:[
       ["'○○ 사태' 후폭풍…책임론 확산","12.4만"],
       ["환율 1,340원 돌파, 수입물가 비상","9.1만"],
       ["프로야구 순위 대격변…선두 교체","7.7만"],
       ["신형 전기차 사전예약 첫날 완판","6.2만"],
       ["폭염 속 전력수요 역대 최고치","5.5만"]]},
+    {type:"market", chips:["market"], sub:{market:"stock"}, module:"증시 · 실시간", rows:[
+      {name:"코스피", v:"6,797.70", c:"▲ 50.1  +0.74%", dir:"up",   s:[3,4,3.6,5,4.8,6,5.6,7]},
+      {name:"코스닥", v:"751.09",   c:"▼ 2.26  -0.30%", dir:"down", s:[6,5.6,5.8,5.4,5.5,5.2,5.3,5.0]}]},
     {type:"live", chips:["live","now"], sub:{now:"h3"},
       title:"국회 본회의 생중계 — 추경 예산안 처리", source:"국회방송", time:"실시간", viewers:"3.2만"},
-    {type:"discuss", chips:["hot","now"], sub:{now:"h3"},
-      title:"'○○법 개정안' 두고 온라인 격론…찬반 팽팽", comments:"1.2만", up:"3.4천", down:"1.1천",
-      topcmt:"“취지는 좋은데 부작용 검토가 부족해 보인다”"},
+    {type:"weather", chips:["weather"],
+      loc:"서울 · 중구", temp:"27°", cond:"흐리고 비 · 체감 30°",
+      alert:"호우경보 · 시간당 50mm", hours:["1시","2시","3시","4시","5시"], htemp:["28°","27°","27°","26°","26°"]},
+    {type:"socialproof", chips:["hot"], count:"509", source:"스포츠경향", time:"32분 전",
+      title:"손흥민, 시즌 20호골 폭발…팀 단독 선두 등극"},
+    {type:"pedometer", fav:true, favRank:2, chips:["daily"],
+      steps:"7,842", cmp:"▲ 1,204", pct:78,
+      msg:"목표 10,000걸음까지 2,158걸음! 조금만 더 힘내요"},
     {type:"briefing", chips:["now"], sub:{now:"morning"},
       sub2:"7월 27일 · 오늘 꼭 알아야 할 3가지", bullets:[
       "간밤 미 증시 상승 마감, 오늘 코스피 강세 출발 전망",
       "전국 대부분 지역 강한 비…출근길 교통 혼잡 유의",
       "이번 주 주요 기업 실적 발표 집중, 변동성 확대 주의"]},
-    {type:"socialproof", chips:["hot"], count:"509", source:"스포츠경향", time:"32분 전",
-      title:"손흥민, 시즌 20호골 폭발…팀 단독 선두 등극"},
-    {type:"commentcuration", chips:["hot"],
-      name:"김도현", role:"대중음악 평론가", likes:"1,204",
-      quote:"올해 최고의 컴백. 사운드 완성도가 다른 차원이다",
-      article:"○○ 새 앨범, 발매 첫날 음원차트 올킬"},
     {type:"fact", chips:["fact","hot"], verdict:"대체로 사실", vclass:"t",
       claim:"“최근 물가 상승률이 2년 만에 최저치를 기록했다”", source:"팩트체크팀 검증"},
     {type:"market", chips:["market"], sub:{market:"fx"}, module:"환율 · 실시간", rows:[
@@ -536,8 +536,7 @@
   var chipsEl = document.getElementById("chips");
   var emptyEl = document.getElementById("empty");
   var activeChip = null, activeSub = null;
-  var defaultFav = cardEls.some(function(c){ return c.dataset.fav === "1"; });   // default ON if any favorite exists
-  var favActive = defaultFav;
+  var favActive = false;   // favorites view is OFF by default
 
   function starIcon(){return '<svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.9 6.2 21l1.1-6.5L2.6 9.9l6.5-.9z" stroke-linejoin="round"/></svg>';}
   function iconX(){return '<svg viewBox="0 0 24 24" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>';}
@@ -593,7 +592,7 @@
     activeChip = id; activeSub = null; favActive = false;   // category filter turns off favorites view
     updateChips(); render();
   }
-  function clearAll(){ activeChip = null; activeSub = null; favActive = defaultFav; updateChips(); render(); }
+  function clearAll(){ activeChip = null; activeSub = null; favActive = false; updateChips(); render(); }
   function onSub(pid, sid){
     if(activeChip !== pid) return;
     activeSub = (activeSub === sid) ? null : sid;   // re-select sub → back to all subs
