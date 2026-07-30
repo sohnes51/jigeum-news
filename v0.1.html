@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="지금 — 뉴스 앱 인터랙션 프로토타입 v0.2 (와이어프레임)">
-<title>지금 — 뉴스 프로토타입 v0.2</title>
+<meta name="description" content="지금 — 뉴스 앱 인터랙션 프로토타입 (와이어프레임)">
+<title>지금 — 뉴스 와이어프레임</title>
 <style>
   :root{
     --paper:#F7F7F6;
@@ -39,11 +39,6 @@
 
   /* Header: search (Daum placeholder, wireframe mono) */
   .mast{padding:10px 18px 4px;flex:none;}
-  /* top header: menu + notification */
-  .topbar{display:flex;align-items:center;justify-content:space-between;margin:-2px -4px 8px;}
-  .hbtn{width:40px;height:40px;padding:0;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
-  .hbtn svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
-  .hbtn .noti-dot{position:absolute;top:7px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);}
   .searchbar{display:flex;align-items:center;gap:11px;height:50px;padding:0 6px 0 14px;border-radius:26px;background:var(--card);border:1.5px solid var(--ink);cursor:text;}
   .dlogo{width:28px;height:28px;flex:none;display:flex;}
   .dlogo svg{width:100%;height:100%;}
@@ -63,8 +58,7 @@
   .ttrend.steady::before{content:"";width:11px;height:2px;background:var(--ink3);}
 
   /* Chips — Spotify-style single-row filter (select → others collapse, subs fill in same line) */
-  .chiprow{position:relative;flex:none;}
-  .chips{display:flex;align-items:center;overflow-x:auto;padding:14px 18px 6px 67px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .chips{display:flex;align-items:center;overflow-x:auto;padding:14px 18px 6px;flex:none;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
   .chips::-webkit-scrollbar{display:none;}
   .chip{flex:none;display:flex;align-items:center;gap:7px;height:41px;max-width:260px;margin-right:8px;padding:0 16px;border-radius:22px;
     background:var(--card);border:1.6px solid var(--chipline);
@@ -83,18 +77,6 @@
   /* connected hierarchy capsule: [parent | sub] */
   .chip.cap-l{margin-right:0;border-top-right-radius:0;border-bottom-right-radius:0;border-right:0;}
   .chip.cap-r{border-top-left-radius:0;border-bottom-left-radius:0;border-left:1.6px solid rgba(255,255,255,.5);padding-left:15px;}
-  /* fixed filter control (does not scroll with the topic chips) */
-  #control{position:absolute;left:18px;top:14px;z-index:3;display:flex;align-items:center;justify-content:center;
-    width:41px;height:41px;min-width:41px;padding:0;border-radius:22px;background:var(--card);border:1.6px solid var(--chipline);cursor:pointer;
-    transition:transform .15s ease;}
-  #control:active{transform:scale(.93);}
-  #control svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:2;}
-  /* blur + fade so topic chips merge softly as they scroll under the fixed control */
-  .chipmask{position:absolute;left:0;top:9px;bottom:2px;width:66px;z-index:2;pointer-events:none;
-    background:linear-gradient(to right,var(--paper) 0,rgba(247,247,246,.92) 40%,rgba(247,247,246,0) 100%);
-    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
-    -webkit-mask-image:linear-gradient(to right,#000 0,#000 46%,transparent 100%);
-            mask-image:linear-gradient(to right,#000 0,#000 46%,transparent 100%);}
 
   /* Feed */
   .scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 18px 28px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
@@ -237,13 +219,6 @@
   </div>
 
   <div class="mast">
-    <div class="topbar">
-      <button class="hbtn" aria-label="메뉴"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-      <button class="hbtn" aria-label="알림">
-        <svg viewBox="0 0 24 24"><path d="M18 8.5a6 6 0 1 0-12 0c0 6.5-2.5 7.5-2.5 7.5h17s-2.5-1-2.5-7.5z"/><path d="M10.2 20.5a1.9 1.9 0 0 0 3.6 0"/></svg>
-        <span class="noti-dot" aria-label="새 알림"></span>
-      </button>
-    </div>
     <div class="searchbar">
       <span class="dlogo" aria-label="Daum">
         <svg viewBox="0 0 32 32" fill="none" stroke="#2B2B2F" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 6 H16.5 A10 10 0 0 1 16.5 26 H9 Z"/></svg>
@@ -255,11 +230,7 @@
 
   <div class="trend" id="trend" aria-label="실시간 트렌드"><div class="trendtrack" id="trendtrack"></div></div>
 
-  <div class="chiprow">
-    <div class="chips" id="chips"></div>
-    <div class="chipmask" aria-hidden="true"></div>
-    <button class="control" id="control" aria-label="필터"></button>
-  </div>
+  <div class="chips" id="chips"></div>
 
   <div class="scroll" id="scroll">
     <div id="feed">
@@ -440,9 +411,11 @@
   function iconMenu(){return '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>';}
   function iconX(){return '<svg viewBox="0 0 24 24" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>';}
 
-  var control = document.getElementById("control");
+  var control = document.createElement("button");
+  control.className = "chip control";
   control.innerHTML = iconMenu();
   control.addEventListener("click", function(){ if(activeChip) clearAll(); });
+  chipsEl.appendChild(control);
 
   // All chips + sub-chips live in ONE row, fixed DOM order (subs right after their parent,
   // collapsed until the parent is active). State changes just toggle .collapsed → CSS width
