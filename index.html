@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="지금 — 뉴스 앱 인터랙션 프로토타입 v0.2 (와이어프레임)">
-<title>지금 — 뉴스 프로토타입 v0.2</title>
+<meta name="description" content="지금 — 뉴스 앱 인터랙션 프로토타입 v0.3 (와이어프레임)">
+<title>지금 — 뉴스 프로토타입 v0.3</title>
 <style>
   :root{
     --paper:#F7F7F6;
@@ -38,21 +38,23 @@
   .status svg{stroke:var(--ink);fill:none;stroke-width:1.5;}
 
   /* Header: search (Daum placeholder, wireframe mono) */
-  .mast{padding:10px 18px 4px;flex:none;}
+  .mast{position:relative;height:110px;box-sizing:border-box;padding:10px 18px 4px;flex:none;overflow:visible;transition:height .42s cubic-bezier(.22,.61,.36,1);}
   /* top header: menu + notification */
   .topbar{display:flex;align-items:center;justify-content:space-between;margin:-2px -4px 8px;}
   .hbtn{width:40px;height:40px;padding:0;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
   .hbtn svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
   .hbtn .noti-dot{position:absolute;top:7px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);}
-  .searchbar{display:flex;align-items:center;gap:11px;height:50px;padding:0 6px 0 14px;border-radius:26px;background:var(--card);border:1.5px solid var(--ink);cursor:text;}
+  .searchbar{position:absolute;left:50%;top:56px;width:calc(100% - 36px);transform:translateX(-50%);box-sizing:border-box;z-index:2;
+    display:flex;align-items:center;gap:11px;height:50px;padding:0 6px 0 14px;border-radius:26px;background:var(--card);border:1.5px solid var(--ink);cursor:text;
+    transition:width .42s cubic-bezier(.22,.61,.36,1),height .42s cubic-bezier(.22,.61,.36,1),transform .42s cubic-bezier(.22,.61,.36,1),box-shadow .3s ease;}
   .dlogo{width:28px;height:28px;flex:none;display:flex;}
   .dlogo svg{width:100%;height:100%;}
-  .sfield{flex:1;color:var(--ink3);font-size:14px;font-weight:600;font-family:var(--sans);}
+  .sfield{flex:1;color:var(--ink3);font-size:14px;font-weight:600;font-family:var(--sans);transition:opacity .24s ease;}
   .sicon{width:42px;height:42px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;}
   .sicon svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:1.8;}
 
   /* 실시간 트렌드 — rolling ticker, no title */
-  .trend{flex:none;margin:4px 18px 0;height:45px;overflow:hidden;}
+  .trend{flex:none;margin:4px 18px 0;height:45px;overflow:hidden;transition:height .42s cubic-bezier(.22,.61,.36,1),opacity .3s ease,margin .42s cubic-bezier(.22,.61,.36,1);}
   .trendtrack{display:flex;flex-direction:column;}
   .trow{height:45px;display:flex;align-items:center;gap:11px;padding:0 15px;flex:none;}
   .trank{font-family:var(--mono);font-weight:800;font-size:15px;color:var(--ink);width:14px;text-align:center;flex:none;}
@@ -97,6 +99,13 @@
     -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
     -webkit-mask-image:linear-gradient(to right,#000 0,#000 46%,transparent 100%);
             mask-image:linear-gradient(to right,#000 0,#000 46%,transparent 100%);}
+
+  /* collapse-on-scroll: 검색창은 헤더 중앙으로 축소·상승, 트렌드는 접히고, 칩 라인이 헤더 밑에 고정 */
+  .phone.collapsed .mast{height:50px;}
+  .phone.collapsed .searchbar{width:198px;height:40px;transform:translateX(-50%) translateY(-50px);box-shadow:0 3px 12px rgba(0,0,0,.07);}
+  .phone.collapsed .searchbar .sfield{opacity:0;}
+  .phone.collapsed .trend{height:0;opacity:0;margin-top:0;margin-bottom:0;pointer-events:none;}
+  .phone.collapsed .chiprow{box-shadow:0 1px 0 rgba(0,0,0,.05);}
 
   /* Feed */
   .scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 18px 28px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
@@ -278,6 +287,69 @@
   .tab .ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
   .tab.on{color:var(--ink);}
 
+  /* ===== Nike 브랜디드 큐레이션 ===== */
+  .swoosh{height:.66em;width:auto;fill:currentColor;vertical-align:-.04em;}
+  .brandchip .swoosh{height:11px;margin-right:5px;}
+
+  /* ① 런클럽 매거진 표지 */
+  .card.nikecover{padding:0;border:none;background:none;overflow:visible;}
+  .nkcover{position:relative;height:406px;border-radius:12px;overflow:hidden;background:var(--dark);border:1.5px solid var(--line);}
+  .nkcover-ph{position:absolute;inset:0;border:none;border-radius:0;}
+  .nkcover-scrim{position:absolute;left:0;right:0;bottom:0;top:34%;z-index:1;
+    background:linear-gradient(to top,rgba(20,20,22,.95) 0,rgba(20,20,22,.72) 42%,rgba(20,20,22,0) 100%);}
+  .nkcover-top{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:15px 16px;}
+  .nkmast{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:800;font-size:12.5px;letter-spacing:1.5px;color:var(--ink);}
+  .nkmast .swoosh{height:14px;margin-right:1px;}
+  .nkissue{font-family:var(--mono);font-weight:700;font-size:10.5px;letter-spacing:1px;color:var(--ink2);}
+  .nkcover-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 18px 22px;color:#fff;}
+  .nkkicker{display:inline-block;font-family:var(--mono);font-weight:800;font-size:10.5px;letter-spacing:2px;color:#fff;border:1.5px solid rgba(255,255,255,.6);border-radius:4px;padding:2px 8px;margin-bottom:12px;}
+  .nktitle{margin:0;font-size:29px;line-height:1.16;font-weight:900;letter-spacing:-.7px;}
+  .nksub{display:block;margin-top:11px;font-size:13px;font-weight:600;color:rgba(255,255,255,.82);}
+  .nkbadge{position:absolute;bottom:24px;right:18px;z-index:2;font-family:var(--mono);font-size:9.5px;font-weight:800;letter-spacing:.5px;color:rgba(255,255,255,.85);border:1.5px solid rgba(255,255,255,.5);border-radius:4px;padding:2px 7px;}
+
+  /* ② 러닝화 광고 배너 */
+  .card.nikeproduct{padding:0;overflow:hidden;}
+  .nkprod{display:flex;align-items:stretch;min-height:138px;}
+  .nkprod-ph{width:43%;flex:none;border:none;border-right:1.5px solid var(--line);border-radius:0;}
+  .nkprod-body{flex:1;min-width:0;padding:15px 16px;display:flex;flex-direction:column;}
+  .nkbrand{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-weight:800;font-size:12.5px;letter-spacing:2px;color:var(--ink);}
+  .nkbrand .swoosh{height:12px;margin-right:1px;}
+  .nkprod-name{margin-top:9px;font-size:17px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
+  .nkprod-tagline{margin-top:3px;font-size:12.5px;font-weight:600;color:var(--ink2);line-height:1.4;}
+  .nkprod-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:12px;}
+  .nkprice{font-family:var(--mono);font-weight:800;font-size:14px;color:var(--ink);}
+  .nkcta{font-family:var(--mono);font-size:12px;font-weight:800;color:#fff;background:var(--dark);border-radius:7px;padding:7px 13px;}
+  .nkad{position:absolute;top:10px;left:10px;z-index:3;background:var(--card);}
+
+  /* ③ 러닝 지표 위젯 */
+  .runtop{display:flex;align-items:center;gap:14px;margin:8px 0 2px;}
+  .rundist{font-family:var(--mono);font-weight:800;font-size:38px;letter-spacing:-1.5px;color:var(--ink);line-height:1;}
+  .rundist span{font-size:15px;font-weight:700;color:var(--ink2);margin-left:5px;letter-spacing:0;}
+  .runring{margin-left:auto;position:relative;width:60px;height:60px;flex:none;}
+  .runring::before{content:"";position:absolute;inset:0;z-index:0;border-radius:50%;background:conic-gradient(var(--dark) calc(var(--p)*1%),var(--line) 0);}
+  .runring::after{content:"";position:absolute;inset:7px;z-index:1;border-radius:50%;background:var(--card);}
+  .runring span{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:800;color:var(--ink);}
+  .runstats{display:flex;gap:8px;margin-top:16px;}
+  .runstats>div{flex:1;border:1.5px solid var(--line);border-radius:9px;padding:9px 8px;text-align:center;}
+  .runstats b{display:block;font-family:var(--mono);font-size:14px;font-weight:800;color:var(--ink);}
+  .runstats span{display:block;margin-top:4px;font-size:10.5px;font-weight:700;color:var(--ink2);}
+  .runbars{display:flex;align-items:flex-end;gap:6px;height:46px;margin-top:16px;}
+  .runbars i{flex:1;min-height:8px;background:var(--fill);border:1.5px solid var(--line);border-radius:3px 3px 0 0;}
+  .runbars i.on{background:var(--dark);border-color:var(--dark);}
+  .rundays{display:flex;gap:6px;margin-top:6px;}
+  .rundays span{flex:1;text-align:center;font-size:9.5px;font-weight:700;color:var(--ink3);font-family:var(--mono);}
+
+  /* ④ 러닝 기사(브랜드 콘텐츠) 묶음 */
+  .runlist{list-style:none;margin:4px 0 0;padding:0;}
+  .runlist li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1.5px solid var(--line);}
+  .runlist li:first-child{border-top:none;padding-top:4px;}
+  .runthumb{width:58px;height:58px;border-radius:8px;flex:none;}
+  .runitem{flex:1;min-width:0;}
+  .runtitle{font-size:14.5px;font-weight:700;letter-spacing:-.2px;color:var(--ink);line-height:1.34;}
+  .runitem .src{margin-top:6px;gap:5px;}
+  .runitem .src .swoosh{height:12px;}
+  .nkct{font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.5px;color:var(--ink2);border:1.5px solid var(--line);border-radius:4px;padding:2px 7px;}
+
   @media(prefers-reduced-motion:reduce){.card,.chip,.subchip,.livebadge .b{transition:none !important;animation:none !important;}}
 </style>
 </head>
@@ -350,6 +422,7 @@
       {id:"h3",label:"3시간 전"},{id:"h6",label:"6시간 전"},{id:"morning",label:"모닝 브리핑"}]},
     {id:"daily",   label:"매일 체크"},
     {id:"hot",     label:"지금 뜨거운"},
+    {id:"nike",    label:"Nike", brand:true},
     {id:"market",  label:"마켓 나우", subs:[
       {id:"stock",label:"증시"},{id:"fx",label:"환율"},{id:"coin",label:"코인"}]},
     {id:"weather", label:"기상·재난"},
@@ -425,7 +498,21 @@
     {type:"headline", chips:["now"], sub:{now:"h6"},
       title:"○○ 정상회담 공동합의문 발표…경제협력 확대", source:"연합뉴스", time:"6시간 전", tbadge:"6시간 전"},
     {type:"headline", chips:["now"], sub:{now:"h6"},
-      title:"○○지역 대규모 정전, 6시간 만에 전량 복구", source:"지역일보", time:"6시간 전", tbadge:"6시간 전"}
+      title:"○○지역 대규모 정전, 6시간 만에 전량 복구", source:"지역일보", time:"6시간 전", tbadge:"6시간 전"},
+
+    /* ===== Nike 브랜디드 큐레이션 — nike 칩 선택 시에만 노출(only) ===== */
+    {type:"nikecover", chips:["nike"], only:true, nofav:true,
+      issue:"2026 SUMMER", kicker:"RUNNING ISSUE",
+      title:"이 여름,<br>나만의 페이스로", lead:"지금 뜨는 러너들의 루틴 · 코스 · 기어"},
+    {type:"nikeproduct", chips:["nike"], only:true, nofav:true,
+      name:"Nike Pegasus 41", tag:"매일의 러닝에 반응하는 쿠셔닝", price:"139,000원"},
+    {type:"runwidget", chips:["nike"], only:true, nofav:true,
+      dist:"23.4", pace:"5’32”", runs:"4", dur:"2:11", pct:78,
+      bars:[42,70,0,55,90,34,62]},
+    {type:"runmag", chips:["nike"], only:true, nofav:true, title:"러닝, 이렇게 시작하세요", items:[
+      {t:"초보 러너를 위한 첫 5K 완주 가이드", s:"Nike Journal"},
+      {t:"내 발에 맞는 러닝화 고르는 법", s:"Nike Journal"},
+      {t:"페이스를 지키는 호흡 루틴 3가지", s:"Nike Journal"}]}
   ];
 
   function build(c){
@@ -434,12 +521,59 @@
     el.dataset.chips = c.chips.join(" ");
     el.dataset.fav = c.fav ? "1" : "0";
     el.dataset.favrank = (c.favRank != null ? c.favRank : 99);
+    if(c.only) el.dataset.only = "1";   // 브랜드 전용: 해당 칩 선택 시에만 노출
     if(c.sub){ Object.keys(c.sub).forEach(function(k){ el.dataset["sub"+k.charAt(0).toUpperCase()+k.slice(1)] = c.sub[k]; }); }
-    el.innerHTML = TPL[c.type](c) +
-      '<button class="favbtn'+(c.fav?" on":"")+'" aria-label="즐겨찾기"><svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.9 6.2 21l1.1-6.5L2.6 9.9l6.5-.9z" stroke-linejoin="round"/></svg></button>';
+    el.innerHTML = TPL[c.type](c) + (c.nofav ? "" :
+      '<button class="favbtn'+(c.fav?" on":"")+'" aria-label="즐겨찾기"><svg viewBox="0 0 24 24"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.9 6.2 21l1.1-6.5L2.6 9.9l6.5-.9z" stroke-linejoin="round"/></svg></button>');
     return el;
   }
+  function nkSwoosh(){ return '<svg class="swoosh" viewBox="0 0 46 18" aria-hidden="true"><path d="M43.7 0.6C29 6.5 12.8 11.8 5.2 14.4 1.6 15.6 0 14 2.9 11.8 11.9 5 27.6 0.8 40.9 0c3-.2 4.7-.2 2.8 .6z"/></svg>'; }
+
   var TPL = {
+    nikecover:function(c){
+      return '<div class="nkcover">'+
+        '<div class="nkcover-ph ph"></div>'+
+        '<div class="nkcover-scrim"></div>'+
+        '<div class="nkcover-top"><span class="nkmast">'+nkSwoosh()+'NIKE RUN CLUB</span><span class="nkissue">'+c.issue+'</span></div>'+
+        '<div class="nkcover-cap"><span class="nkkicker">'+c.kicker+'</span>'+
+          '<h2 class="nktitle">'+c.title+'</h2>'+
+          '<span class="nksub">'+c.lead+'</span></div>'+
+        '<span class="nkbadge">브랜드 매거진</span>'+
+      '</div>';
+    },
+    nikeproduct:function(c){
+      return '<span class="adtag nkad">AD · 광고</span>'+
+        '<div class="nkprod">'+
+          '<div class="nkprod-ph ph"></div>'+
+          '<div class="nkprod-body">'+
+            '<div class="nkbrand">'+nkSwoosh()+'NIKE</div>'+
+            '<div class="nkprod-name">'+c.name+'</div>'+
+            '<div class="nkprod-tagline">'+c.tag+'</div>'+
+            '<div class="nkprod-foot"><span class="nkprice">'+c.price+'</span><span class="nkcta">지금 보기 ›</span></div>'+
+          '</div>'+
+        '</div>';
+    },
+    runwidget:function(c){
+      return '<div class="chead"><span class="eyebrow">이번 주 러닝</span><span class="more">NRC 동기화</span></div>'+
+        '<div class="runtop">'+
+          '<div class="rundist">'+c.dist+'<span>km</span></div>'+
+          '<div class="runring" style="--p:'+c.pct+'"><span>'+c.pct+'%</span></div>'+
+        '</div>'+
+        '<div class="runstats">'+
+          '<div><b>'+c.pace+'</b><span>평균 페이스</span></div>'+
+          '<div><b>'+c.runs+'회</b><span>러닝</span></div>'+
+          '<div><b>'+c.dur+'</b><span>누적 시간</span></div>'+
+        '</div>'+
+        '<div class="runbars">'+c.bars.map(function(v){return '<i class="'+(v>=85?'on':'')+'" style="height:'+Math.max(8,v)+'%"></i>';}).join("")+'</div>'+
+        '<div class="rundays"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>';
+    },
+    runmag:function(c){
+      return '<div class="chead"><span class="eyebrow">'+c.title+'</span><span class="nkct">브랜드 콘텐츠</span></div>'+
+        '<ul class="runlist">'+c.items.map(function(it){
+          return '<li><div class="runthumb ph"></div><div class="runitem"><div class="runtitle">'+it.t+'</div>'+
+            '<div class="src">'+nkSwoosh()+'<span class="brandname">'+it.s+'</span></div></div></li>';
+        }).join("")+'</ul>';
+    },
     widgets:function(c){
       return '<div class="wchead">오늘 한눈에</div>'+
         '<div class="wcoll">'+
@@ -519,7 +653,7 @@
   var scrollEl = document.getElementById("scroll");
   var cardEls = CARDS.map(function(c){
     var el = build(c);
-    if(c.type==="ranking"||c.type==="market"||c.type==="timenews") el.classList.add("mod");
+    if(["ranking","market","timenews","runwidget","runmag"].indexOf(c.type) >= 0) el.classList.add("mod");
     feed.appendChild(el);
     return el;
   });
@@ -569,8 +703,8 @@
   var chipEls = {}, subEls = {};
   CHIPS.forEach(function(cat){
     var b = document.createElement("button");
-    b.className = "chip";
-    b.innerHTML = (cat.live?'<span class="live-tag"></span>':'') + cat.label;
+    b.className = "chip" + (cat.brand ? " brandchip" : "");
+    b.innerHTML = (cat.live?'<span class="live-tag"></span>':'') + (cat.brand?nkSwoosh():'') + cat.label;
     b.addEventListener("click", function(){ onChip(cat.id); });
     chipsEl.appendChild(b);
     chipEls[cat.id] = b;
@@ -629,6 +763,7 @@
   render(true);   // apply default favorites-first ordering on load (instant, no animation)
 
   function cardVisible(el){
+    if(!activeChip && el.dataset.only === "1") return false;   // 브랜드 전용 카드는 기본/즐겨찾기 뷰에서 숨김
     if(activeChip && el.dataset.chips.split(" ").indexOf(activeChip) < 0) return false;
     if(activeSub){
       var key = "sub" + activeChip.charAt(0).toUpperCase() + activeChip.slice(1);
@@ -643,6 +778,7 @@
   function render(instant){
     finalizeLeaving();
     if(activeChip !== null) scrollEl.scrollTop = 0;   // category filter resets view to top
+    if(typeof applyCollapse === "function") applyCollapse();   // 필터 상태 반영: 켜지면 압축 유지, 풀리면 복원
     var quick = reduce || instant;
     var items = Array.prototype.slice.call(feed.children);
     var first = new Map();
@@ -661,7 +797,7 @@
 
     // Build target order of feed children (visible cards in order, with ads slotted in).
     var showAdTop = (activeChip === null);
-    var showAdFeed = (activeChip !== null && visCount >= 1);
+    var showAdFeed = (activeChip !== null && activeChip !== "nike" && visCount >= 1);   // 나이키 뷰는 자체 브랜드 광고만
     var seq = [];
     if(showAdTop) seq.push(adTop);
     if(showAdFeed){
@@ -745,6 +881,24 @@
         setTimeout(function(){ track.style.transition="none"; track.style.transform="translateY(0)"; ti=0; }, reduce?20:580);
       }
     }, 2600);
+  })();
+
+  // ---- 피드 스크롤 → 헤더 collapse (검색창 헤더 중앙 축소 + 칩 라인 고정) ----
+  var phoneEl = document.querySelector(".phone");
+  function applyCollapse(){
+    if(!phoneEl || !scrollEl) return;
+    var y = scrollEl.scrollTop;
+    var collapsed = phoneEl.classList.contains("collapsed");
+    var want;
+    if(!collapsed && y > 46){ want = true; }         // 스크롤 다운 → 압축
+    else if(collapsed && y < 10){ want = false; }    // 상단 복귀 → 복원
+    else { want = collapsed; }                       // 히스테리시스 유지 구간
+    phoneEl.classList.toggle("collapsed", want);     // 압축은 오직 스크롤로만 결정(칩 선택은 트리거 아님)
+  }
+  (function initCollapse(){
+    if(!scrollEl) return;
+    scrollEl.addEventListener("scroll", applyCollapse, {passive:true});
+    applyCollapse();
   })();
 })();
 </script>
